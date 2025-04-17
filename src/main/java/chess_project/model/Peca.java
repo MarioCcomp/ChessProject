@@ -1,5 +1,7 @@
 package chess_project.model;
 
+import java.util.ArrayList;
+
 import chess_project.enums.*;
 import javafx.util.Pair;
 
@@ -45,5 +47,5 @@ public abstract class Peca {
 		this.id = id;
 	}
 
-	public abstract void getMovimento();
+	public abstract ArrayList<Pair<Integer, Integer>> getMovimento(Pair<Integer, Integer> posFinal);
 }

@@ -1,0 +1,6 @@
+chess_project/model/Tabuleiro.class
+chess_project/model/Peca.class
+chess_project/Main.class
+chess_project/enums/Cor.class
+chess_project/model/pecas/Peao.class
+chess_project/model/Partida.class
