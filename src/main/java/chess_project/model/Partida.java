@@ -4,10 +4,15 @@ import chess_project.enums.*;
 
 public class Partida {
 	private Tabuleiro tabuleiro;
-	private Jogador jogadorAtual;
+	private Cor jogadorAtual;
 	
-	public Partida (Tabuleiro tabuleiro, Jogador jogadorAtual) {
+	public Partida (Tabuleiro tabuleiro, Cor jogadorAtual) {
 		this.tabuleiro = tabuleiro;
 		this.jogadorAtual = jogadorAtual;
 	}
+
+	
+	
+	
+	
 }
