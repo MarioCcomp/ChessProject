@@ -1,11 +1,10 @@
 package chess_project.model;
+import javafx.util.Pair;
 
 public abstract class Peca {
-	private String nome;
+	private Pair<Integer, Integer> posicao;
 	
-	public Peca(String nome) {
-		this.nome = nome;
-	}
 	
-	public abstract void getMovimento();
+	
+//	public abstract void getMovimento();
 }
