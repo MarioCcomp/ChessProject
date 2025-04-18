@@ -39,11 +39,11 @@ public class Peao extends Peca{
 			System.out.println("nao pode andar mais de 2 casas");
 			return false;
 		}
-		if((posFinal.getValue() != this.getPosicao().getValue()) && (posFinal.getKey() <= this.getPosicao().getKey())) {
+		if((posFinal.getValue() != this.getPosicao().getValue()) && (posFinal.getKey() >= this.getPosicao().getKey())) {
 			System.out.println("nao pode mudar de coluna e diminuir ou manter a linha");
 			return false;
 		}
-		if(this.getPosicao().getValue() - posFinal.getValue() > 1) {
+		if(this.getPosicao().getValue() - posFinal.getValue() > 1 || posFinal.getValue() - this.getPosicao().getValue() > 1) {
 			System.out.println("vc nao pode andar mais de 2 colunas");
 			return false;
 		}
@@ -52,8 +52,10 @@ public class Peao extends Peca{
 			return false;
 			
 		}
-		else if(this.getPosicao().getKey() == 6 && this.getPosicao().getKey() - posFinal.getKey() == 2){
-			System.out.println("ta liberado andar 2 casas pai");
+		
+		if(posFinal.getKey() >= this.getPosicao().getKey()) {
+			System.out.println("peao nao anda pra tras burro, ou vc ja ta ai");
+			return false;
 		}
 		return true;
 	}

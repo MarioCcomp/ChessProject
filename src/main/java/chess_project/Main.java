@@ -7,7 +7,7 @@ import javafx.util.Pair;
 public class Main {
 	public static void main(String[] args) {
 		Tabuleiro tabuleiro = new Tabuleiro();
-		tabuleiro.movimentarPeca(new Pair<Integer, Integer>(6, 0), new Pair<Integer, Integer>(4, 0));
+		tabuleiro.movimentarPeca(new Pair<Integer, Integer>(6, 5), new Pair<Integer, Integer>(6, 5));
 		
 	}
 }
