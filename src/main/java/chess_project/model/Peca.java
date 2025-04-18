@@ -47,5 +47,5 @@ public abstract class Peca {
 		this.id = id;
 	}
 
-	public abstract ArrayList<Pair<Integer, Integer>> getMovimento(Pair<Integer, Integer> posFinal);
+	public abstract ArrayList<Pair<Integer, Integer>> getMovimento(Pair<Integer, Integer> posFinal, Cor cor);
 }

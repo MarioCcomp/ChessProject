@@ -30,38 +30,63 @@ public class Tabuleiro {
 			}
 			System.out.println();
 		}
+	
 	}
 	
-	public void movimentarPeca(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) {
+	public Boolean movimentarPeca(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor) {
+		if(casas[posAtual.getKey()][posAtual.getValue()].getCor() != cor) {
+			System.out.println("vc nao pode mexer a peca do outro time ");
+			return false;
+		}
 		Peca peca = casas[posAtual.getKey()][posAtual.getValue()];
-		ArrayList<Pair<Integer, Integer>> trajeto = peca.getMovimento(posFinal);
+		ArrayList<Pair<Integer, Integer>> trajeto = peca.getMovimento(posFinal, cor);
 		if(trajeto.isEmpty()) {
 			System.out.println("alguma verificacao na peca falhou");
-			return;
+			return false;
 		}
+		
+		
+		
+		if(peca.getClass().equals(Peao.class)) {
+			if(!this.validarPeao(posAtual, posFinal)) {
+				return false;
+			}
+		}
+		
 		for(Pair<Integer, Integer> par : trajeto) {
 			System.out.println("(" + par.getKey() + ", " + par.getValue() + ") ");
 		}
 		
-		if(peca.getClass().equals(Peao.class)) {
-			this.validarPeao(posAtual, posFinal);
-		}
+		return true;
 		
 		
 	}
 	
-	private void validarPeao(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) {
+	private Boolean validarPeao(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) {
 		
 		if(posFinal.getValue() != posAtual.getValue()) { // se a pos final diz que o peao mudou de coluna
 			if(casas[posFinal.getKey()][posFinal.getValue()] != null) { // se a posicao final nao for nula, o peao come oq tava la
 				System.out.println("peao come1");
-				return;
+				Peca peao = casas[posAtual.getKey()][posAtual.getValue()];
+				casas[posAtual.getKey()][posAtual.getValue()] = null;
+				casas[posFinal.getKey()][posFinal.getValue()] = peao;
+				casas[posFinal.getKey()][posFinal.getValue()].setPosicao(posFinal);
+				return true;
 			}
 			else {
 				System.out.println("vc nao pode vir pra ca1"); // se for nula, o peao nao pode ir pra la
-				return;
+				return false;
 			}
 		}
+		else if(casas[posFinal.getKey()][posFinal.getValue()] != null){
+			System.out.println("vc nao pode atravessar a peca seu burro");
+			return false;
+		}
+		Peca peao = casas[posAtual.getKey()][posAtual.getValue()];
+		casas[posAtual.getKey()][posAtual.getValue()] = null;
+		casas[posFinal.getKey()][posFinal.getValue()] = peao;
+		casas[posFinal.getKey()][posFinal.getValue()].setPosicao(posFinal);
+		return true;
 		
 		
 		
