@@ -1,5 +1,6 @@
 package chess_project.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import chess_project.enums.*;
@@ -47,5 +48,5 @@ public abstract class Peca {
 		this.id = id;
 	}
 
-	public abstract ArrayList<Pair<Integer, Integer>> getMovimento(Pair<Integer, Integer> posFinal, Cor cor);
+	public abstract ArrayList<Pair<Integer, Integer>> getMovimento(Pair<Integer, Integer> posFinal, Cor cor) throws IOException;
 }

@@ -4,6 +4,7 @@ import chess_project.enums.*;
 import java.util.Scanner;
 import chess_project.model.*;
 import java.util.List;
+import java.io.IOException;
 import java.util.ArrayList;
 import javafx.util.Pair;
 
@@ -22,12 +23,16 @@ public class Partida {
 	public void jogar()
     {
         while (true) {
-            this.tabuleiro.printarTabuleiro();
-            List<Pair<Integer, Integer>> dadosDoMovimento = this.lerMovimento();
-            
-            if(this.tabuleiro.movimentarPeca(dadosDoMovimento.get(0), dadosDoMovimento.get(1), jogadorAtual)) {
-            	mudarTurno();
+            try {
+            	this.tabuleiro.printarTabuleiro();
+                List<Pair<Integer, Integer>> dadosDoMovimento = this.lerMovimento();
+                
+                this.tabuleiro.movimentarPeca(dadosDoMovimento.get(0), dadosDoMovimento.get(1), jogadorAtual);
+                	mudarTurno();
+            } catch(IOException error) {
+            	System.out.println(error.getMessage());
             }
+            
             
         }
     }
@@ -51,6 +56,9 @@ public class Partida {
             List<Pair<Integer, Integer>> movimentos = new ArrayList<>();
             movimentos.add(new Pair<>(x1, y1));
             movimentos.add(new Pair<>(x2, y2));
+            for(Pair<Integer, Integer> movimento : movimentos) {
+            	System.out.println("aqui um movimento: " + movimento);
+            }
             return movimentos;
 
         } catch (NumberFormatException e) {

@@ -1,6 +1,8 @@
 package chess_project.model;
 import chess_project.enums.Cor;
 import chess_project.model.pecas.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.util.Pair;
@@ -29,66 +31,61 @@ public class Tabuleiro {
 				}
 			}
 			System.out.println();
+			System.out.println();
 		}
 	
 	}
 	
-	public Boolean movimentarPeca(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor) {
+	public void movimentarPeca(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor) throws IOException {
+		if(casas[posAtual.getKey()][posAtual.getValue()] == null) {
+			throw new IOException("deu nulo no atual");
+		}
+		
+		
 		if(casas[posAtual.getKey()][posAtual.getValue()].getCor() != cor) {
-			System.out.println("vc nao pode mexer a peca do outro time ");
-			return false;
+			throw new IOException("vc nao pode mexer a peca do outro timeee");
 		}
 		Peca peca = casas[posAtual.getKey()][posAtual.getValue()];
 		ArrayList<Pair<Integer, Integer>> trajeto = peca.getMovimento(posFinal, cor);
-		if(trajeto.isEmpty()) {
-			System.out.println("alguma verificacao na peca falhou");
-			return false;
-		}
+		
 		
 		
 		
 		if(peca.getClass().equals(Peao.class)) {
-			if(!this.validarPeao(posAtual, posFinal)) {
-				return false;
-			}
+			this.validarPeao(posAtual, posFinal);
+			
 		}
 		
 		for(Pair<Integer, Integer> par : trajeto) {
 			System.out.println("(" + par.getKey() + ", " + par.getValue() + ") ");
 		}
 		
-		return true;
 		
 		
 	}
 	
-	private Boolean validarPeao(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) {
+	private void validarPeao(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) throws IOException {
 		
 		if(posFinal.getValue() != posAtual.getValue()) { // se a pos final diz que o peao mudou de coluna
 			if(casas[posFinal.getKey()][posFinal.getValue()] != null) { // se a posicao final nao for nula, o peao come oq tava la
-				System.out.println("peao come1");
 				Peca peao = casas[posAtual.getKey()][posAtual.getValue()];
 				casas[posAtual.getKey()][posAtual.getValue()] = null;
 				casas[posFinal.getKey()][posFinal.getValue()] = peao;
 				casas[posFinal.getKey()][posFinal.getValue()].setPosicao(posFinal);
-				return true;
+				return;
 			}
 			else {
-				System.out.println("vc nao pode vir pra ca1"); // se for nula, o peao nao pode ir pra la
-				return false;
+						// se for nula, o peao nao pode ir pra la
+				throw new IOException("vc njao pode vir pra ca");
 			}
 		}
 		else if(casas[posFinal.getKey()][posFinal.getValue()] != null){
-			System.out.println("vc nao pode atravessar a peca seu burro");
-			return false;
+			throw new IOException("vc nao pode atravessar a peca seu burroo");
 		}
 		Peca peao = casas[posAtual.getKey()][posAtual.getValue()];
 		casas[posAtual.getKey()][posAtual.getValue()] = null;
 		casas[posFinal.getKey()][posFinal.getValue()] = peao;
 		casas[posFinal.getKey()][posFinal.getValue()].setPosicao(posFinal);
-		return true;
-		
-		
 		
 		
 	}
