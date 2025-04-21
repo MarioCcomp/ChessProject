@@ -37,9 +37,7 @@ public class Tabuleiro {
 	}
 	
 	public void movimentarPeca(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor) throws IOException {
-		if(casas[posAtual.getKey()][posAtual.getValue()] == null) {
-			throw new IOException("deu nulo no atual");
-		}
+
 		
 		
 		if(casas[posAtual.getKey()][posAtual.getValue()].getCor() != cor) {
@@ -52,7 +50,7 @@ public class Tabuleiro {
 		
 		
 		if(peca.getClass().equals(Peao.class)) {
-			this.validarPeao(posAtual, posFinal);
+			this.validarPeao(posAtual, posFinal, cor);
 			
 		}
 		
@@ -64,10 +62,10 @@ public class Tabuleiro {
 		
 	}
 	
-	private void validarPeao(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) throws IOException {
+	private void validarPeao(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor) throws IOException {
 		
 		if(posFinal.getValue() != posAtual.getValue()) { // se a pos final diz que o peao mudou de coluna
-			if(casas[posFinal.getKey()][posFinal.getValue()] != null) { // se a posicao final nao for nula, o peao come oq tava la
+			if(casas[posFinal.getKey()][posFinal.getValue()] != null && casas[posFinal.getKey()][posFinal.getValue()].getCor() != cor) { // se a posicao final nao for nula e nao for da mesma cor, o peao come oq tava la
 				Peca peao = casas[posAtual.getKey()][posAtual.getValue()];
 				casas[posAtual.getKey()][posAtual.getValue()] = null;
 				casas[posFinal.getKey()][posFinal.getValue()] = peao;
