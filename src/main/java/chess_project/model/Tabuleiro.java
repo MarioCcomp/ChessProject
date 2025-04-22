@@ -18,6 +18,19 @@ public class Tabuleiro {
 			Peao peao2 = new Peao(6, i, Cor.PRETAS, 'P');
 			casas[6][i] = peao2;
 		}
+		
+		Cavalo cavaloBrancas1 = new Cavalo(0, 1, Cor.BRANCAS, 'C');
+		Cavalo cavaloBrancas2 = new Cavalo(0, 6, Cor.BRANCAS, 'C');
+		
+		Cavalo cavaloPretas1 = new Cavalo(7, 1, Cor.PRETAS, 'C');
+		Cavalo cavaloPretas2 = new Cavalo(7, 6, Cor.PRETAS, 'C');
+		
+		this.casas[0][1] = cavaloBrancas1;
+		this.casas[0][6] = cavaloBrancas2;
+		
+		this.casas[7][1] = cavaloPretas1;
+		this.casas[7][6] = cavaloPretas2;
+		
 	}
 	
 	public void printarTabuleiro() {
@@ -54,6 +67,10 @@ public class Tabuleiro {
 			
 		}
 		
+		if(peca.getClass().equals(Cavalo.class)) {
+			this.validarCavalo(posAtual, posFinal, cor);
+		}
+		
 		for(Pair<Integer, Integer> par : trajeto) {
 			System.out.println("(" + par.getKey() + ", " + par.getValue() + ") ");
 		}
@@ -85,6 +102,17 @@ public class Tabuleiro {
 		casas[posFinal.getKey()][posFinal.getValue()] = peao;
 		casas[posFinal.getKey()][posFinal.getValue()].setPosicao(posFinal);
 		
+		
+	}
+	
+	private void validarCavalo(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor) throws IOException {
+		if(this.casas[posFinal.getKey()][posFinal.getValue()] != null && this.casas[posFinal.getKey()][posFinal.getValue()].getCor() == cor) {
+			throw new IOException("vc nao pode ocmer alguem do seu time ne chefe");
+		}
+		Cavalo cavalo = (Cavalo) casas[posAtual.getKey()][posAtual.getValue()];
+		casas[posFinal.getKey()][posFinal.getValue()] = cavalo;
+		casas[posAtual.getKey()][posAtual.getValue()] = null;
+		cavalo.setPosicao(posFinal);
 		
 	}
 	
