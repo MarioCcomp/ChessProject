@@ -1,6 +1,7 @@
 package chess_project.model;
 
 import java.nio.channels.Pipe.SourceChannel;
+import java.io.IOException;
 
 import chess_project.enums.Cor;
 import chess_project.model.Peao.*;
@@ -38,15 +39,17 @@ public class Tabuleiro {
 	}
 	
 	
-	public void movimentarPeca(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) {
+	public void movimentarPeca(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal) throws IOException {
 	    Peca peca = casas[posAtual.getKey()][posAtual.getValue()];
 	    if (peca == null) return;
-
+	    ArrayList <Pair<Integer, Integer>> trajeto = peca.getMovimento(posFinal);
+	    if (trajeto.isEmpty()) {
+	    	return;
+	    }
+	    
 	    // Validação específica para peões
 	    if (peca instanceof Peao) {
-	        if (!validarPeao(posFinal, posAtual)) {
-	            return; // Sai se a validação falhar
-	        }
+	        this.validarPeao(posFinal, posAtual);
 	    }
 
 	    // Restante da lógica (atualiza matriz)
@@ -56,25 +59,22 @@ public class Tabuleiro {
 	}
 	
 	
-	private boolean validarPeao(Pair<Integer, Integer> posFinal, Pair<Integer, Integer> posAtual) {
+	private void validarPeao(Pair<Integer, Integer> posFinal, Pair<Integer, Integer> posAtual) throws IOException {
 	    Peca peca = casas[posAtual.getKey()][posAtual.getValue()];
 	    int diffColuna = Math.abs(posFinal.getValue() - posAtual.getValue());
 
 	    // Movimento reto (nao pode ter peca no destino)
 	    if (diffColuna == 0 && casas[posFinal.getKey()][posFinal.getValue()] != null) {
-	        System.out.println("ERRO! Peão não pode capturar para frente.");
-	        return false; 
+	    	throw new IOException("ERRO! Peão não pode capturar para frente."); 
 	    }
 
 	    // Movimento diagonal deve ter peça adversaria
 	    if (diffColuna == 1) {
 	        Peca pecaAlvo = casas[posFinal.getKey()][posFinal.getValue()];
 	        if (pecaAlvo == null || pecaAlvo.getTime() == peca.getTime()) {
-	            System.out.println("ERRO! Só pode mover na diagonal para capturar.");
-	            return false;
+	        	throw new IOException("ERRO! Só pode mover na diagonal para capturar.");
 	        }
-	    }
-	    return true; 
+	    } 
 	}
 	
 	public Peca getPeca(Pair<Integer, Integer> posicao) {

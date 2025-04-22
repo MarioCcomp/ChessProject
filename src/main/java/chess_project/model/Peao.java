@@ -1,6 +1,7 @@
 package chess_project.model;
 
 import java.util.*;	
+import java.io.IOException;
 
 import chess_project.enums.Cor;
 import javafx.util.Pair;
@@ -14,12 +15,11 @@ public class Peao extends Peca{
 	}
 
 	@Override
-	public ArrayList<Pair<Integer, Integer>> getMovimento (Pair <Integer, Integer> posFinal) {
+	public ArrayList<Pair<Integer, Integer>> getMovimento (Pair <Integer, Integer> posFinal) throws IOException {
 	    ArrayList<Pair<Integer, Integer>> posicoes = new ArrayList<>();
-
-	    if (!this.validarMovimento(posFinal)) {
-	        return posicoes; 
-	    }
+	    //System.out.println("testetetetet");
+	    
+	    this.validarMovimento(posFinal);
 
 	    
 	    if (Math.abs(this.getPosicao().getKey() - posFinal.getKey()) == 2) {
@@ -32,35 +32,41 @@ public class Peao extends Peca{
 	}
 
 	
-	private Boolean validarMovimento (Pair<Integer, Integer> posFinal) {
-		if (this.getPosicao().getKey() - posFinal.getKey() > 2) {
-			System.out.println("Movimento incorreto!! não é possível andar mais de duas casas");
-			return false;
-		}
-		
-		if (this.getPosicao().getKey() != 6 && this.getPosicao().getKey() - posFinal.getKey() >= 2) {
-			System.out.print("ERRO!! Peão só pode se movimentar duas unidades no primeiro movimento!!");
-			return false;
-		}
-		
-		if ((this.getPosicao().getValue() != posFinal.getValue()) && (this.getPosicao().getKey() <= posFinal.getKey() )) {
-			System.out.println ("ERRO!! Você não pode voltar com um  peão!!");
-			return false;
-		}
-		// tentativa de mover um peao mais de uma casa na diagonal
-		if (posFinal.getValue() - this.getPosicao().getValue() > 1 || this.getPosicao().getValue() - posFinal.getValue() > 1) {
-			System.out.println("ERRO!! movimento não segue as regras do jogo!!");
-			return false;
-		}
-		if (posFinal.getKey() >= this.getPosicao().getKey()) {
-			System.out.println("movimento incorreto!!");
-			return false;
-		}
-//		if (posFinal.getKey() - this.getPosicao().getKey() >= 1 ) {
-//			System.out.println("Voce nao pode voltar!!");
-//			return false;
-//		}
-		
-	return true;
-	}
+	private void validarMovimento(Pair<Integer, Integer> posFinal) throws IOException {
+        int deltaLinha = posFinal.getKey() - this.getPosicao().getKey();
+        int deltaColuna = posFinal.getValue() - this.getPosicao().getValue();
+        int direcao = (this.getTime() == Cor.BRANCAS) ? 1 : -1;
+
+        // Movimento para frente
+        if (deltaColuna == 0) {
+            // Verifica direção correta
+            if (deltaLinha * direcao <= 0) {
+                throw new IOException("ERRO!! Peão não pode mover para trás.");
+            }
+
+            // Verifica quantidade de casas
+            if (Math.abs(deltaLinha) > 2) {
+                throw new IOException("Movimento incorreto!! não é possível andar mais de duas casas");
+            }
+
+            // Verifica movimento inicial de duas casas
+            if (Math.abs(deltaLinha) == 2) {
+                if ((this.getTime() == Cor.BRANCAS && this.getPosicao().getKey() != 1) || 
+                    (this.getTime() == Cor.PRETAS && this.getPosicao().getKey() != 6)) {
+                    throw new IOException("ERRO!! Peão só pode se movimentar duas unidades no primeiro movimento!!");
+                }
+            }
+        } 
+        // Movimento diagonal (captura)
+        else if (Math.abs(deltaColuna) == 1) {
+            // Deve mover apenas uma casa na direção correta
+            if (deltaLinha != direcao) {
+                throw new IOException("ERRO!! Movimento diagonal do peão deve ser uma casa na direção correta.");
+            }
+        } 
+        // Movimento inválido
+        else {
+            throw new IOException("ERRO!! Movimento não permitido para o peão.");
+        }
+    }
 }

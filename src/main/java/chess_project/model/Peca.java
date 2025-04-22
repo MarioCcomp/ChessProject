@@ -1,5 +1,6 @@
 package chess_project.model;
 import javafx.util.Pair;
+import java.io.IOException;
 
 import java.util.ArrayList;
 
@@ -61,5 +62,5 @@ public abstract class Peca {
 
 
 
-	public abstract ArrayList<Pair<Integer, Integer>> getMovimento (Pair <Integer, Integer> posFinal) ; 
+	public abstract ArrayList<Pair<Integer, Integer>> getMovimento (Pair <Integer, Integer> posFinal) throws IOException; 
 }

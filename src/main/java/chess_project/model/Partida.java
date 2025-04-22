@@ -1,5 +1,7 @@
 package chess_project.model;
 import chess_project.enums.*;
+
+import java.io.IOException;
 import javafx.util.Pair;
 import java.util.*;
 import java.util.Scanner;
@@ -20,19 +22,23 @@ public class Partida {
     {
         
         while (true) {
-            this.tabuleiro.printarTabuleiro();
-            System.out.println("Vez do jogador: " + this.jogadorAtual);
-            List<Pair<Integer, Integer>> dadosDoMovimento = this.lerMovimento();
-            
-            Peca peca = tabuleiro.getPeca(dadosDoMovimento.get(0));
-            if (peca == null || peca.getTime() != this.jogadorAtual) {
-            	System.out.println("ERRO: Não é sua peça ou posição inválida!");
-                continue;
+            try {
+	        	this.tabuleiro.printarTabuleiro();
+	            System.out.println("Vez do jogador: " + this.jogadorAtual);
+	            List<Pair<Integer, Integer>> dadosDoMovimento = this.lerMovimento();
+	            
+	            Peca peca = tabuleiro.getPeca(dadosDoMovimento.get(0));
+	            if (peca == null || peca.getTime() != this.jogadorAtual) {
+	            	System.out.println("ERRO: Não é sua peça ou posição inválida!");
+	                continue;
+	            }
+	            //passa a posicao atual e a final
+	            this.tabuleiro.movimentarPeca(dadosDoMovimento.get(0), dadosDoMovimento.get(1));
+	            //so alterna se o movimento for valido
+	            this.jogadorAtual = (this.jogadorAtual == Cor.BRANCAS) ? Cor.PRETAS : Cor.BRANCAS;
+            } catch (IOException erro) {
+            	System.out.println(erro.getMessage());
             }
-            //passa a posicao atual e a final
-            this.tabuleiro.movimentarPeca(dadosDoMovimento.get(0), dadosDoMovimento.get(1));
-            //so alterna se o movimento for valido
-            this.jogadorAtual = (this.jogadorAtual == Cor.BRANCAS) ? Cor.PRETAS : Cor.BRANCAS;
             
         }
     }
