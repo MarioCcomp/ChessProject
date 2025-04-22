@@ -56,9 +56,9 @@ public class Partida {
             List<Pair<Integer, Integer>> movimentos = new ArrayList<>();
             movimentos.add(new Pair<>(x1, y1));
             movimentos.add(new Pair<>(x2, y2));
-            for(Pair<Integer, Integer> movimento : movimentos) {
-            	System.out.println("aqui um movimento: " + movimento);
-            }
+//            for(Pair<Integer, Integer> movimento : movimentos) {
+//            	System.out.println("aqui um movimento: " + movimento);
+//            }
             return movimentos;
 
         } catch (NumberFormatException e) {

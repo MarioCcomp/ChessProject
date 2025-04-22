@@ -45,6 +45,20 @@ public class Tabuleiro {
 		this.casas[7][0] = torrePretas1;
 		this.casas[7][7] = torrePretas2;
 		
+		
+		Bispo bispoBrancas1 = new Bispo(0, 2, Cor.BRANCAS, 'B');
+		Bispo bispoBrancas2 = new Bispo(0, 5, Cor.BRANCAS, 'B');
+		
+		Bispo bispoPretas1 = new Bispo(7, 2, Cor.PRETAS, 'B');
+		Bispo bispoPretas2 = new Bispo(7, 5, Cor.PRETAS, 'B');
+		
+		
+		this.casas[0][2] = bispoBrancas1;
+		this.casas[0][5] = bispoBrancas2;
+		
+		this.casas[7][2] = bispoPretas1;
+		this.casas[7][5] = bispoPretas2;
+		
 	}
 	
 	public void printarTabuleiro() {
@@ -89,6 +103,9 @@ public class Tabuleiro {
 			this.validarTorre(posAtual, posFinal, cor, trajeto);
 		}
 		
+		if(peca.getClass().equals(Bispo.class)) {
+			this.validarBispo(posAtual, posFinal, cor, trajeto);
+		}
 		
 		for(Pair<Integer, Integer> par : trajeto) {
 			System.out.println("(" + par.getKey() + ", " + par.getValue() + ") ");
@@ -161,7 +178,32 @@ public class Tabuleiro {
 		
 		casas[linhaInicial][colunaInicial] = null;
 		torre.setPosicao(posFinal);
-		casas[linhaFinal][colunaFinal] = torre;
+		casas[linhaFinal][colunaFinal] = torre;	
+	}
+	
+	private void validarBispo(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor, ArrayList<Pair<Integer, Integer>> trajeto) throws IOException {
+	
+		int linhaFinal = posFinal.getKey();
+		int colunaFinal = posFinal.getValue();
+		
+		int linhaInicial = posAtual.getKey();
+		int colunaInicial = posAtual.getValue();
+		if(this.casas[linhaFinal][colunaFinal] != null && this.casas[linhaFinal][colunaFinal].getCor() == cor) {
+			throw new IOException("vc nao pode comer alguem do seu time");
+		}
+		
+		for(Pair<Integer, Integer> casa : trajeto) {
+			if(this.casas[casa.getKey()][casa.getValue()] != null) {
+				System.out.println(casa);
+				System.out.println(this.casas[casa.getKey()][casa.getValue()]);
+				throw new IOException("Tem uma peca no caminho do bispo"); 
+			}
+		}
+		
+		Bispo bispo = (Bispo) this.casas[linhaInicial][colunaInicial];
+		this.casas[linhaInicial][colunaInicial] = null;
+		this.casas[linhaFinal][colunaFinal] = bispo;
+		bispo.setPosicao(posFinal);
 		
 		
 	}
