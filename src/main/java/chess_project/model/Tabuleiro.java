@@ -31,6 +31,20 @@ public class Tabuleiro {
 		this.casas[7][1] = cavaloPretas1;
 		this.casas[7][6] = cavaloPretas2;
 		
+		
+		
+		Torre torreBrancas1 = new Torre(0, 0, Cor.BRANCAS, 'T');
+		Torre torreBrancas2 = new Torre(0, 7, Cor.BRANCAS, 'T');
+		
+		Torre torrePretas1 = new Torre(7, 0, Cor.PRETAS, 'T');
+		Torre torrePretas2 = new Torre(7, 7, Cor.PRETAS, 'T');
+		
+		this.casas[0][0] = torreBrancas1;
+		this.casas[0][7] = torreBrancas2;
+		
+		this.casas[7][0] = torrePretas1;
+		this.casas[7][7] = torrePretas2;
+		
 	}
 	
 	public void printarTabuleiro() {
@@ -70,6 +84,11 @@ public class Tabuleiro {
 		if(peca.getClass().equals(Cavalo.class)) {
 			this.validarCavalo(posAtual, posFinal, cor);
 		}
+		
+		if(peca.getClass().equals(Torre.class)) {
+			this.validarTorre(posAtual, posFinal, cor, trajeto);
+		}
+		
 		
 		for(Pair<Integer, Integer> par : trajeto) {
 			System.out.println("(" + par.getKey() + ", " + par.getValue() + ") ");
@@ -113,6 +132,37 @@ public class Tabuleiro {
 		casas[posFinal.getKey()][posFinal.getValue()] = cavalo;
 		casas[posAtual.getKey()][posAtual.getValue()] = null;
 		cavalo.setPosicao(posFinal);
+		
+	}
+	
+	private void validarTorre(Pair<Integer, Integer> posAtual, Pair<Integer, Integer> posFinal, Cor cor, ArrayList<Pair<Integer, Integer>> trajeto) throws IOException {
+		int linhaFinal = posFinal.getKey();
+		int colunaFinal = posFinal.getValue();
+		if(casas[linhaFinal][colunaFinal] != null && casas[linhaFinal][colunaFinal].getCor() == cor) {
+			throw new IOException("vc nao pode comer alguem do seu time");
+		}
+		
+		int tamanhoArray = trajeto.size();
+		for(int i = 0; i < tamanhoArray; i++) {
+			int linha = trajeto.get(i).getKey();
+			int coluna = trajeto.get(i).getValue();
+			if(casas[linha][coluna] != null && i != tamanhoArray - 1) {
+				throw new IOException("tem uma peca no caminho chefe");
+			}
+		}
+		
+		int linhaInicial = posAtual.getKey();
+		int colunaInicial = posAtual.getValue();
+		
+		
+		
+		
+		Torre torre = (Torre) casas[linhaInicial][colunaInicial];
+		
+		casas[linhaInicial][colunaInicial] = null;
+		torre.setPosicao(posFinal);
+		casas[linhaFinal][colunaFinal] = torre;
+		
 		
 	}
 	
